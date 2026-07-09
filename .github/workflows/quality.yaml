@@ -1,0 +1,39 @@
+name: Quality Checks
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.14"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update --quiet
+          sudo apt-get install --quiet --no-install-recommends \
+            make \
+            python3 \
+            python3-pip \
+            python3-venv \
+            python3-gi \
+            python3-cairo \
+            libgtk-4-dev \
+            libadwaita-1-dev \
+            libgtksourceview-5-dev \
+            libwebkitgtk-6.0-dev \
+            xvfb
+
+      - name: Build
+        run: make build
+
+      - name: Test
+        run: xvfb-run make test
