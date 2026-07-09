@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Markdown Editor
+Comment=Edit Markdown files with live preview
+GenericName=Markdown Editor
+Exec=markdown-editor %F
+Icon=markdown-editor
+Terminal=false
+Categories=Utility;TextEditor;
+MimeType=text/markdown;
+Keywords=markdown;edit;preview;
+StartupNotify=true
+StartupWMClass=com.fdcs.mdeditor

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<style-scheme id="markdown-editor-dark" _name="Markdown Editor Dark" version="1.0">
+  <author>Markdown Editor</author>
+  <_description>Dark color scheme for Markdown Editor</_description>
+
+  <!-- Base colors -->
+  <color name="bg-dark" value="#242424"/>
+  <color name="bg-gutter" value="#1a1a1a"/>
+  <color name="fg-light" value="#d4d4d4"/>
+  <color name="fg-gutter" value="#858585"/>
+  <color name="selection-bg" value="#264f78"/>
+  <color name="selection-fg" value="#d4d4d4"/>
+  <color name="current-line" value="#2f2f2f"/>
+
+  <!-- Markdown syntax colors -->
+  <color name="md-heading" value="#569cd6"/>
+  <color name="md-link" value="#4ec9b0"/>
+  <color name="md-emphasis" value="#d4d4d4"/>
+  <color name="md-code" value="#ce9178"/>
+  <color name="md-list" value="#dcdcaa"/>
+
+  <!-- Global styles -->
+  <style name="text" foreground="fg-light" background="bg-dark"/>
+  <style name="selection" foreground="selection-fg" background="selection-bg"/>
+  <style name="cursor" foreground="fg-light"/>
+  <style name="current-line" background="current-line"/>
+  <style name="line-numbers" foreground="fg-gutter" background="bg-gutter"/>
+
+  <!-- Markdown styles -->
+  <style name="def:comment" foreground="md-link" italic="true"/>
+  <style name="def:string" foreground="md-code"/>
+  <style name="def:preprocessor" foreground="md-heading" bold="true"/>
+  <style name="def:keyword" foreground="md-list" bold="true"/>
+  <style name="def:type" foreground="md-heading"/>
+  <style name="def:special-char" foreground="md-code"/>
+  <style name="def:note" foreground="md-link" italic="true"/>
+
+  <!-- Markdown language-specific styles -->
+  <style name="markdown:header" foreground="md-heading" bold="true"/>
+  <style name="markdown:emphasis" foreground="md-emphasis" italic="true"/>
+  <style name="markdown:strong-emphasis" foreground="md-emphasis" bold="true"/>
+  <style name="markdown:code-block" foreground="md-code"/>
+  <style name="markdown:code-span" foreground="md-code"/>
+  <style name="markdown:url" foreground="md-link"/>
+  <style name="markdown:link-text" foreground="md-link"/>
+  <style name="markdown:list-marker" foreground="md-list" bold="true"/>
+  <style name="markdown:blockquote-marker" foreground="md-list"/>
+  <style name="markdown:image-marker" foreground="md-link"/>
+  <style name="markdown:label" foreground="md-link"/>
+  <style name="markdown:horizontal-rule" foreground="md-list"/>
+  <style name="markdown:line-break" foreground="md-link"/>
+  <style name="markdown:backslash-escape" foreground="md-code"/>
+  <style name="markdown:attribute-value" foreground="md-code"/>
+</style-scheme>

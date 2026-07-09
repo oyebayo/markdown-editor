@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "markdown-editor"
+version = "0.2.1"
+description = "A Markdown editor with live preview"
+authors = [
+    {name = "sinistrian", email = "oyebayo@gmail.com"}
+]
+requires-python = ">=3.10"
+dependencies = [
+    "mistune>=3.0.0",
+    "Pygments>=2.0.0",
+    "latex2mathml>=3.77.0",
+]
+
+[project.scripts]
+markdown-editor = "mdeditor.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+mdeditor = ["ui/styles/*"]

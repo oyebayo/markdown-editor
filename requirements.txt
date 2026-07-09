@@ -1,0 +1,16 @@
+# Runtime
+PyGObject>=3.46.0
+mistune>=3.0.0
+Pygments>=2.0.0
+latex2mathml>=3.77.0
+
+# System dependencies (install via package manager, not pip):
+# - gtk4
+# - libadwaita
+# - gtksourceview5
+# - webkit2gtk-6.0 (WebKit 6.0 for GTK4)
+
+# Testing
+flake8>=7.0
+pytest>=8.0
+build>=1.0
