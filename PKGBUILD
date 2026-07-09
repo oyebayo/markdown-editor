@@ -3,12 +3,12 @@ pkgver=0.2.1
 pkgrel=1
 pkgdesc="A Markdown editor with live preview"
 arch=('any')
-url="https://r.fdcs.lan/sinistrian/markdown-editor"
+url="https://github.com/oyebayo/markdown-editor"
 license=("MIT")
 depends=("python" "gtk4" "libadwaita" "gtksourceview5" "python-mistune" "python-pygments" "python-latex2mathml")
 makedepends=("python" "python-build" "python-installer" "python-setuptools" "python-wheel" "git")
 
-source=("git+https://r.fdcs.lan/sinistrian/markdown-editor.git")
+source=("git+https://github.com/oyebayo/markdown-editor.git")
 sha256sums=("SKIP")
 
 pkgver() {
