@@ -15,9 +15,6 @@ jobs:
           pacman -Sy --noconfirm git > /dev/null 2>&1
           sed -i 's/EUID == 0/EUID == -1/' /usr/bin/makepkg
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Install build dependencies
         run: |
           pacman -Syu --noconfirm --needed --quiet \
@@ -36,8 +33,12 @@ jobs:
             fakeroot \
             debugedit > /dev/null 2>&1
 
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
       - name: Update pkgrel
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           TAG=$(git describe --tags --abbrev=0)
           COMMITS=$(git rev-list --count "${TAG}..HEAD")
           PKGREL=$(( COMMITS + 1 ))
