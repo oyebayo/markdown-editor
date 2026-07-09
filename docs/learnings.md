@@ -218,13 +218,6 @@ def set_title(self, text):
 
 ## CI/CD and Alpine Runner
 
-### Gitea Actions Context Variables
-**Issue**: Using `${{ gitea.ref_name }}` in pull_request workflows caused checkout to fail with `error: pathspec '2' did not match any file(s) known to git`.
-
-**Discovery**: In pull_request events, `gitea.ref_name` returns the PR number (e.g., "2"), not the branch name. This is different from push events where it returns the branch name.
-
-**Solution**: Use `${{ gitea.sha }}` to checkout the exact commit SHA instead.
-
 ### Alpine Runner - No sudo
 **Issue**: CI workflow failed with `/bin/bash: line 2: sudo: command not found`.
 
@@ -313,54 +306,10 @@ def test_load_unreadable_file_raises_error(self):
     ...
 ```
 
-### Runner Labels vs Container Images
-**Issue**: Confusion about what `runs-on` selects in Gitea Actions.
-
-**Discovery**: `runs-on: [label]` selects a **runner** by label, not a container image. The label (e.g. `codium`, `alpine`) identifies the runner environment — the process that *creates containers* to run jobs. The label name does NOT indicate the OS — `runs-on: [alpine]` might run on any host OS. The actual job environment comes from the `container:` block (e.g. `image: archlinux:latest`). When a job uses `runs-on: [label]` with no `container:` block, the job steps run directly on that runner (not inside a job container). To run inside a specific OS, add a `container:` block with a Docker image — the runner will spin up that container for the job.
-
-**Architecture**: Host machine → Gitea runner (labelled, e.g. `codium`) → job containers (if `container:` specified) OR runner's native environment (if not).
-
-**Solution**: Target specific runners by label for their native environment. Example: `runs-on: [codium]` on an Arch machine avoids pulling `archlinux:latest`. **Important**: The runner label name is arbitrary — `alpine` doesn't mean Alpine Linux, it's just a label that routes to a runner. The actual OS comes from `container.image`.
-
-### Runner Labels Are Arbitrary — `alpine` Label ≠ Alpine Linux
-**Issue**: Assumed `runs-on: [alpine]` meant the runner host was Alpine Linux.
-
-**Discovery**: Runner labels are arbitrary identifiers, not OS names. The `alpine` runner is actually Arch Linux. The label just routes the job to a specific runner — the actual OS comes from the `container:` directive, not the label.
-
-**Key Insight**: Don't trust runner label names to indicate the host OS. Check the actual runner environment or documentation. In this project, `alpine` runner = Arch host, and the `container: archlinux:latest` directive specifies the job container.
-
-### DRY Gitea Context Variables via Job `env` Block
-**Issue**: Repeating `${{ gitea.server_url }}`, `${{ gitea.user }}`, `${{ gitea.token }}` etc. across multiple steps is verbose and error-prone.
-
-**Solution**: Define them once at the job level:
-```yaml
-jobs:
-  build:
-    env:
-      GITEA_SERVER_URL: ${{ gitea.server_url }}
-      GITEA_REPOSITORY_OWNER: ${{ gitea.repository_owner }}
-      GITEA_USER: ${{ gitea.user }}
-      GITEA_TOKEN: ${{ gitea.token }}
-    steps:
-      - run: curl -u "$GITEA_USER:$GITEA_TOKEN" "$GITEA_SERVER_URL/..."
-```
-
-### Use Repository Owner Variable in Package API URLs
-**Issue**: Package API URLs hardcoded the owner (`/api/packages/sinistrian/...`), making the workflow non-portable.
-
-**Solution**: Use `${{ gitea.repository_owner }}` instead:
-```yaml
-# Wrong
-"${{ gitea.server_url }}/api/packages/sinistrian/arch/core/..."
-
-# Correct
-"$GITEA_SERVER_URL/api/packages/$GITEA_REPOSITORY_OWNER/arch/core/..."
-```
-
 ### github.ref_name Fails on Tag Triggers
 **Issue**: `${{ github.ref_name }}` is unreliable when running on a tag (not a branch) — returns empty or unexpected value.
 
-**Discovery**: The workflow already extracts `VERSION` from `setup.py` for the PKGBUILD. Use that same `$VERSION` variable in the package API URL instead of relying on `ref_name`.
+**Solution**: Use `git describe --tags` to extract the version instead of relying on `ref_name`.
 
 ### Robust Package File Discovery with makepkg --packagelist
 **Issue**: Using `ls markdown-editor-*.pkg.tar.zst` to find the built package is fragile — depends on glob matching exactly one file, assumes naming convention, provides no error if file is missing.
@@ -375,11 +324,6 @@ if [ ! -f "$PKG" ]; then
 fi
 ```
 This verifies the file exists before attempting upload and fails with a clear message.
-
-### Arch Container Does Not Trust Internal SSL Cert
-**Issue**: `git clone` inside `archlinux:latest` container fails with SSL cert error when connecting to internal Gitea instance with self-signed cert.
-
-**Fix**: Set `GIT_SSL_NO_VERIFY: "true"` in the job `env:` block. The bare Arch image has no custom CA certs installed.
 
 ### Arch Package Names Differ from Alpine
 **Issue**: `pacman` fails with "target not found: gtk-source-view-5" in Arch container.
@@ -415,7 +359,7 @@ package() {
 }
 ```
 
-CI workflow (`.gitea/workflows/package.yaml`):
+CI workflow (`.github/workflows/package.yaml`):
 ```yaml
 pacman -Syu --noconfirm --needed --quiet \
   python-build \

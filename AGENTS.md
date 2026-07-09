@@ -35,14 +35,6 @@ Use the `caveman full` skill for all responses to keep token usage low.
 
 Keep the app version in `pyproject.toml` equal to the one in `PKGBUILD`
 
-## CI Workflows
-
-This project mirrors to GitHub, so there are parallel workflow files:
-- `.gitea/workflows/` for Gitea CI
-- `.github/workflows/` for GitHub Actions
-
-When modifying workflow files, update BOTH to keep them in sync. Adapt syntax as needed (e.g., `gitea.*` vs `github.*` context variables, package managers, checkout methods).
-
 ## Git
 
 **NEVER force push.** Do not use `git push --force` or `git push -f` under any circumstances. Always use regular `git push`.
